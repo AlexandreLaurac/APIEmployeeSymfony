@@ -6,17 +6,32 @@ use App\Entity\Employee ;
 
 class DataService {
 
-    public function getEmployees() {
-        $employeesArray = json_decode($this->employees) ;
-        $employees = array() ;
+    // Constructor
+    public function __construct() {
+        $employeesArray = json_decode($this->employeesJson) ;
+        $this->employees = array() ;
         foreach($employeesArray as $object) {
-            $employees[] = Employee::objectToEmployee($object) ;
+            $this->employees[] = Employee::objectToEmployee($object) ;
         }
-        return $employees ;
     }
 
-    // Hard coded json data
-    private $employees = <<<JSON
+    // Getter methods of service
+    public function getEmployees() {
+        return $this->employees ;
+    }
+
+    public function getEmployeeById(int $id) {
+        if ($id < count($this->employees)) {
+            return $this->employees[$id] ;
+        }
+        else {
+            throw new \Exception("unexisting data") ;
+        }
+    }
+
+    // Properties
+    private array $employees ;
+    private $employeesJson = <<<JSON
     [
         {
             "firstName": "Courtnay",
@@ -340,6 +355,7 @@ class DataService {
         }
     ]
     JSON;
-    }
+
+}
 
 ?>
