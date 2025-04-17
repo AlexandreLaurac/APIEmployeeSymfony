@@ -5,8 +5,7 @@ namespace App\Controller;
 use App\Service\DataService ;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController ;
 use Symfony\Component\Routing\Attribute\Route ;
-use Symfony\Component\Serializer\SerializerInterface ;
-use Symfony\Component\HttpFoundation\Response ;
+use Symfony\Component\HttpFoundation\JsonResponse ;
 
 
 class MainController extends AbstractController {
@@ -16,10 +15,9 @@ class MainController extends AbstractController {
         name:'get_all_employees',
         methods: ['GET']
     )]
-    public function getEmployees(DataService $dataService, SerializerInterface $serializer): Response {
+    public function getEmployees(DataService $dataService): JsonResponse {
         $employees = $dataService->getEmployees() ;
-        $json = $serializer->serialize($employees, 'json') ;
-        return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
+        return new JsonResponse($employees, JsonResponse::HTTP_OK) ;
     }
 }
 
