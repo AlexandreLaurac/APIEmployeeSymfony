@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Service\DataService ;
+use App\Repository\EmployeeRepository ;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController ;
 use Symfony\Component\Routing\Attribute\Route ;
-use Symfony\Component\HttpFoundation\JsonResponse ;
+use Symfony\Component\Serializer\SerializerInterface ;
+use Symfony\Component\HttpFoundation\Response ;
 
 
 class MainController extends AbstractController {
@@ -15,9 +16,10 @@ class MainController extends AbstractController {
         name:'get_all_employees',
         methods: ['GET']
     )]
-    public function getEmployees(DataService $dataService): JsonResponse {
-        $employees = $dataService->getEmployees() ;
-        return new JsonResponse($employees, JsonResponse::HTTP_OK) ;
+    public function getEmployees(SerializerInterface $serializer, EmployeeRepository $er): Response {
+        $employees = $er->findAll() ;
+        $json = $serializer->serialize($employees, 'json') ;
+        return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
     }
 
     #[Route(
@@ -25,13 +27,14 @@ class MainController extends AbstractController {
         name:'get_employee_by_id',
         methods: ['GET']
     )]
-    public function getEmployeeById(DataService $dataService, $id): JsonResponse {
-        try {
-            $employee = $dataService->getEmployeeById($id) ;
-            return new JsonResponse($employee, JsonResponse::HTTP_OK) ;
+    public function getEmployeeById(SerializerInterface $serializer, EmployeeRepository $er, $id): Response {
+        $employee = $er->find($id) ;
+        if ($employee) {
+            $json = $serializer->serialize($employee, 'json') ;
+            return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
         }
-        catch (\Exception $e) {
-            return new JsonResponse(['message' => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND) ;
+        else {
+            return new Response('{ "message":"unexisting data" }', Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']) ;
         }
     }
 }
