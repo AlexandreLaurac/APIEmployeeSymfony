@@ -32,7 +32,7 @@ class MainController extends AbstractController {
         name:'get_employee_by_id',
         methods: ['GET']
     )]
-    public function getEmployeeById(SerializerInterface $serializer, EmployeeRepository $er, $id): Response {
+    public function getEmployeeById(SerializerInterface $serializer, EmployeeRepository $er, int $id): Response {
         $employee = $er->find($id) ;
         if (!$employee) {
             return new Response('{ "message":"unexisting data" }', Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']) ;
@@ -122,6 +122,29 @@ class MainController extends AbstractController {
 
         // Response
         return new Response('{ "message":"employee with id '. $reqEmployee->getId() . ' created" }', Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
+    }
+
+    // DELETE /employees/id
+    #[Route(
+        'employees/{id}',
+        name:'delete_employee',
+        methods: ['DELETE']
+    )]
+    public function deleteEmployee(EntityManagerInterface $em, int $id): Response {
+        // Getting employee with id supplied
+        $currentEmployee = $em->getRepository(Employee::class)->find($id) ;
+
+        // Data existence check
+        if (!$currentEmployee) {
+            return new Response('{ "message":"unexisting data" }', Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']) ;
+        }
+
+        // Deleting employee
+        $em->remove($currentEmployee) ;
+        $em->flush() ;
+
+        // Response
+        return new Response('{ "message":"employee with id '. $id . ' deleted" }', Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
     }
 }
 
