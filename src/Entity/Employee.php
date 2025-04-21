@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
 use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Attribute\Ignore;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -12,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Employee
 {
-    #[Ignore]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
