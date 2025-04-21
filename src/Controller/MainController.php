@@ -32,15 +32,13 @@ class MainController extends AbstractController {
         name:'get_employee_by_id',
         methods: ['GET']
     )]
-    public function getEmployeeById(SerializerInterface $serializer, EmployeeRepository $er, int $id): Response {
+    public function getEmployeeById(SerializerInterface $serializer, EmployeeRepository $er, $id): Response {
         $employee = $er->find($id) ;
-        if ($employee) {
-            $json = $serializer->serialize($employee, 'json') ;
-            return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
-        }
-        else {
+        if (!$employee) {
             return new Response('{ "message":"unexisting data" }', Response::HTTP_NOT_FOUND, ['Content-Type' => 'application/json']) ;
         }
+        $json = $serializer->serialize($employee, 'json') ;
+        return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
     }
 
     // PUT /employees/id
@@ -89,6 +87,41 @@ class MainController extends AbstractController {
         // Response
         $respJson = $serializer->serialize($currentEmployee, 'json') ;
         return new Response($respJson, Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
+    }
+
+    // POST /employees
+    #[Route(
+        'employees',
+        name:'create_employee',
+        methods: ['POST']
+    )]
+    public function createEmployee(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): Response {
+        // Format check (must be json)
+        if ($request->getContentTypeFormat() !== 'json') {
+            return new Response('{ "message":"wrong content-type" }', Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']) ;
+        }
+
+        // Creating employee with data supplied
+        $reqJson = $request->getContent() ;
+        $reqEmployee = $serializer->deserialize($reqJson, Employee::class, 'json') ;
+
+        // Verifying that all properties are supplied
+        if (!$reqEmployee->getFirstName() || !$reqEmployee->getLastName() || !$reqEmployee->getCity() ||
+            !$reqEmployee->getCountry() || !$reqEmployee->getCountryCode() || !$reqEmployee->getBirthDate()) {
+            return new Response('{ "message":"incorrect data, all properties (except id) must be supplied" }', Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']) ;
+        }
+
+        // Setting id (Doctrine unable to interact correctly with existing database - or I am unable to make it take into account the db...)
+        $query = $em->createQuery('SELECT MAX(e.id) FROM App\Entity\Employee e') ;
+        $maxId = $query->getResult()[0][1] ;  // the result is an array of array with these indexes
+        $reqEmployee->setId($maxId + 1) ;
+
+        // Persisting supplied employee
+        $em->persist($reqEmployee) ;
+        $em->flush() ;
+
+        // Response
+        return new Response('{ "message":"employee with id '. $reqEmployee->getId() . ' created" }', Response::HTTP_OK, ['Content-Type' => 'application/json']) ;
     }
 }
 

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Employee
 {
-    #[ORM\Id, ORM\GeneratedValue, ORM\Column]
+    #[ORM\Id, ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(name: 'firstname', length: 20)]
@@ -32,80 +32,66 @@ class Employee
     #[ORM\Column(name: 'birthdate', length: 10)]
     private ?string $birthDate = null;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getFirstName(): ?string
-    {
+    public function setId(string $id): static {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getFirstName(): ?string {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): static
-    {
+    public function setFirstName(string $firstName): static {
         $this->firstName = $firstName;
-
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
+    public function getLastName(): ?string {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): static
-    {
+    public function setLastName(string $lastName): static {
         $this->lastName = $lastName;
-
         return $this;
     }
 
-    public function getCity(): ?string
-    {
+    public function getCity(): ?string {
         return $this->city;
     }
 
-    public function setCity(string $city): static
-    {
+    public function setCity(string $city): static {
         $this->city = $city;
-
         return $this;
     }
 
-    public function getCountry(): ?string
-    {
+    public function getCountry(): ?string {
         return $this->country;
     }
 
-    public function setCountry(string $country): static
-    {
+    public function setCountry(string $country): static {
         $this->country = $country;
-
         return $this;
     }
 
-    public function getCountryCode(): ?string
-    {
+    public function getCountryCode(): ?string {
         return $this->countryCode;
     }
 
-    public function setCountryCode(string $countryCode): static
-    {
+    public function setCountryCode(string $countryCode): static {
         $this->countryCode = $countryCode;
-
         return $this;
     }
 
-    public function getBirthDate(): ?string
-    {
+    public function getBirthDate(): ?string {
         return $this->birthDate;
     }
 
-    public function setBirthDate(string $birthDate): static
-    {
+    public function setBirthDate(string $birthDate): static {
         $this->birthDate = $birthDate;
-
         return $this;
     }
 }
