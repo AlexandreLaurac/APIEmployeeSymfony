@@ -14,7 +14,9 @@ J'ai adapté cet exercice à Symfony (sans utiliser Swagger) avec, dans un premi
 
 A venir :
 - ajout de liens HATEOAS
-- utilisation de APIPlatform ?
+- utilisation de API Platform ?  
+  Màj : en fait... c'est déjà fait. Car, comme monsieur Jourdain qui faisait de la prose sans le savoir, j'ai réalisé une API avec API Platform sans m'en rendre compte. Cela vient de ce que j'ai créé mon projet Symfony avec l'option --api puis créé l'entité Employee avec l'outil Maker en marquant cette classe comme une ressource API Platform...
+  L'API générée par API Platform est disponible à l'adresse localhost:8000/api, page qui affiche les requêtes disponibles avec Swagger UI et en permet l'exécution.
 
 
 ### Installation et utilisation
