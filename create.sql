@@ -7,3 +7,6 @@ CREATE TABLE employee(
     countrycode char(2) NOT NULL,
     birthdate char(10) NOT NULL
 );
+
+CREATE SEQUENCE employee_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+ALTER TABLE employee ALTER COLUMN id SET DEFAULT nextval('employee_id_seq');

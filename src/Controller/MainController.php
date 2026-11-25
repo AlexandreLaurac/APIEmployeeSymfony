@@ -111,11 +111,6 @@ class MainController extends AbstractController {
             return new Response('{ "message":"incorrect data, all properties (except id) must be supplied" }', Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/json']) ;
         }
 
-        // Setting id (Doctrine unable to interact correctly with existing database - or I am unable to make it take into account the db...)
-        $query = $em->createQuery('SELECT MAX(e.id) FROM App\Entity\Employee e') ;
-        $maxId = $query->getResult()[0][1] ;  // the result is an array of array with these indexes
-        $reqEmployee->setId($maxId + 1) ;
-
         // Persisting supplied employee
         $em->persist($reqEmployee) ;
         $em->flush() ;
