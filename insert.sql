@@ -1,3 +1,4 @@
+-- Inserting records in database
 INSERT INTO employee VALUES(1, 'Courtnay', 'Mitzi', 'Tbilisi', 'Senegal', 'VI', '2004-09-18');
 INSERT INTO employee VALUES(2, 'Yvonne', 'Blisse', 'Belfast', 'Saint Helena', 'NO', '2006-11-18');
 INSERT INTO employee VALUES(3, 'Arabel', 'Dyche', 'Niamey', 'Cayman Islands', 'SY', '1998-03-29');
@@ -38,3 +39,6 @@ INSERT INTO employee VALUES(37, 'Sallie', 'Zamora', 'Surat Thani', 'Bahamas', 'A
 INSERT INTO employee VALUES(38, 'Jobi', 'Guthrie', 'Kuching', 'Norfolk Island', 'IR', '2013-06-20');
 INSERT INTO employee VALUES(39, 'Bernardine', 'Peti', 'Dibrugarh', 'Nepal', 'TG', '1982-06-12');
 INSERT INTO employee VALUES(40, 'Mariele', 'Dex', 'Vancouver', 'Cayman Islands', 'KY', '2009-07-22');
+
+-- Updating employee_id_seq value
+SELECT setval('employee_id_seq', (SELECT MAX(id) FROM employee));

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Employee
 {
-    #[ORM\Id, ORM\Column]
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(name: 'firstname', length: 20)]
@@ -34,11 +34,6 @@ class Employee
 
     public function getId(): ?int {
         return $this->id;
-    }
-
-    public function setId(string $id): static {
-        $this->id = $id;
-        return $this;
     }
 
     public function getFirstName(): ?string {
